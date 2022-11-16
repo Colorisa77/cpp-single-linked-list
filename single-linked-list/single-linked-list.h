@@ -75,6 +75,7 @@ class SingleLinkedList {
         //Возвращает ссылку на самого себя
         //Инкремент итератора, не указывающего на существующий элемент списка, приводик к неопределенному поведению
         BasicIterator& operator++() noexcept {
+            assert(node_ != nullptr);
             this->node_ = this->node_->next_node;
             return *this;
         }
@@ -92,11 +93,13 @@ class SingleLinkedList {
         //Оператор разыменовывания. Возвращает ссылку на текущий элемент
         //Вызов этого оператора у итератора, не указывающего на существующий элемент списка, приводи к неопределенному поведению
         [[nodiscard]] reference operator*() const {
+            assert(node_ != nullptr);
             return node_->value;
         }
 
         //Операция доступа к члену класса. Возвращает указатель на текущий элемент списка
         [[nodiscard]] pointer operator->() const {
+            assert(node_ != nullptr);
             return &node_->value;
         }
 
@@ -197,6 +200,7 @@ public:
 
     //Вставляет элемент после указанной позиции и возвращает итератор на элемент, следующий за удалённым
     Iterator InsertAfter(ConstIterator pos, const Type& value) {
+        assert(pos.node_ != nullptr);
         pos.node_->next_node = new Node(value, pos.node_->next_node);
         ++size_;
         return Iterator(pos.node_->next_node);
@@ -252,7 +256,7 @@ public:
             if (other.GetSize() == 0) {
                 return;
             }
-            for (auto it = other.begin(); it != other.end(); ++it) {
+            for (auto& it = other.begin(); it != other.end(); ++it) {
                 temp.PushFront((*it));
             }
             Iterator curr_node = temp.begin();
