@@ -252,29 +252,17 @@ public:
     //Конструктор копирования для копирования другого списка
     SingleLinkedList(const SingleLinkedList& other) {
         if (this != &other) {
-            SingleLinkedList temp;
             if (other.GetSize() == 0) {
                 return;
             }
-            for (auto& it = other.begin(); it != other.end(); ++it) {
-                temp.PushFront((*it));
+            ConstIterator other_node = other.begin();
+            this->PushFront(*other_node);
+            ++other_node;
+            ConstIterator this_node = this->begin();
+            for (; other_node != other.end(); ++other_node) {
+                this->InsertAfter(this_node, *other_node);
+                ++this_node;
             }
-            Iterator curr_node = temp.begin();
-            Iterator next_node = ++temp.begin();
-            Node* prev_node = nullptr;
-            size_t size = temp.GetSize();
-            while (size != 1) {
-                curr_node.node_->next_node = prev_node;
-                prev_node = curr_node.node_;
-                curr_node = next_node;
-                ++next_node;
-                --size;
-            }
-            curr_node.node_->next_node = prev_node;
-            temp.head_.next_node = curr_node.node_;
-            prev_node = nullptr;
-            delete prev_node;
-            swap(temp);
         }
     }
 
